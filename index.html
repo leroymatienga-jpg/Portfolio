@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leroy Matienga | Portfolio</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Three.js & OrbitControls for 3D Globe -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Dimmed Background Slideshow -->
+  <div class="bg-slideshow">
+    <div class="slide slide-1"></div>
+    <div class="slide slide-2"></div>
+    <div class="slide slide-3"></div>
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-badge">L</span>
+      <span class="logo-name">Leroy Matienga</span>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <nav class="nav-links" id="navLinks">
+      <div class="nav-indicator" id="navIndicator"></div>
+      <a href="#home" class="nav-item active">Home</a>
+      <a href="#about" class="nav-item">About</a>
+      <a href="#portfolio" class="nav-item">Portfolio</a>
+      <a href="#skills" class="nav-item">Skills</a>
+      <a href="#contact" class="nav-item">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-container" id="home">
+    <div class="hero-content">
+      
+      <div class="avatar-wrapper">
+        <div class="avatar-glow"></div>
+        <div class="avatar-border">
+          <img src="profile.jpg" alt="Leroy Matienga" class="avatar-img" />
+        </div>
+      </div>
+
+      <div class="hero-text">
+        <p class="role-intro">Hi, I'm a <span class="typing-text" id="typewriter"></span><span class="cursor">&nbsp;</span></p>
+        <h1 class="hero-name">Leroy Matienga</h1>
+        <p class="hero-bio">
+          Undergraduate Computer Science student & Software Developer building efficient backend systems, interactive web applications, and intelligent digital solutions.
+        </p>
+
+        <div class="cta-group">
+          <a href="#" class="btn btn-primary" download><i class="fa-solid fa-download"></i> Download CV</a>
+          <a href="#contact" class="btn btn-secondary">Contact Me</a>
+        </div>
+
+        <div class="social-links">
+          <a href="https://github.com" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="mailto:contact@example.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section-container" id="about">
+    <div class="section-header">
+      <span class="sub-heading">Get To Know Me</span>
+      <h2>About Me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-card glass-card">
+        <i class="fa-solid fa-graduation-cap card-icon"></i>
+        <h3>Education</h3>
+        <p>Computer Science Undergraduate</p>
+        <span>Algorithms, Data Structures & Systems Architecture</span>
+      </div>
+      <div class="about-card glass-card">
+        <i class="fa-solid fa-code card-icon"></i>
+        <h3>Development</h3>
+        <p>Software & Web Engineering</p>
+        <span>Clean code, modern UI/UX, and robust logic</span>
+      </div>
+      <div class="about-card glass-card">
+        <i class="fa-solid fa-microchip card-icon"></i>
+        <h3>Specialization</h3>
+        <p>Backend & AI Systems</p>
+        <span>Automations, databases, and smart assistants</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section with 3D Earth Globe -->
+  <section class="section-container" id="portfolio">
+    <div class="section-header">
+      <span class="sub-heading">Global Deployments</span>
+      <h2>Portfolio Projects</h2>
+      <p class="globe-hint"><i class="fa-solid fa-arrows-spin"></i> Drag to rotate the 3D globe & view project poles</p>
+    </div>
+
+    <!-- 3D Space Globe Frame -->
+    <div class="globe-wrapper glass-card" id="globeWrapper">
+      <button class="fullscreen-btn" id="fullscreenBtn" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+      <div id="globe-container"></div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="python">Python</button>
+      <button class="filter-btn" data-filter="web">Web Dev</button>
+      <button class="filter-btn" data-filter="ai">AI / Tools</button>
+    </div>
+
+    <div class="projects-grid">
+      <!-- Project 1: Africa -->
+      <div class="project-card glass-card" data-category="ai">
+        <div class="project-img-box">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="MUSA Assistant" />
+        </div>
+        <div class="project-details">
+          <div class="tags">
+            <span><i class="fa-solid fa-location-dot"></i> Africa</span>
+            <span>Python</span><span>NLP</span><span>API</span>
+          </div>
+          <h3>MUSA Assistant</h3>
+          <p>Voice- and text-activated AI assistant integrated with student portal systems for academic queries and scheduling.</p>
+          <div class="project-links">
+            <a href="#" target="_blank"><i class="fa-brands fa-github"></i> Code</a>
+            <a href="#" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Demo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2: North America -->
+      <div class="project-card glass-card" data-category="python">
+        <div class="project-img-box">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Inventory Desktop GUI" />
+        </div>
+        <div class="project-details">
+          <div class="tags">
+            <span><i class="fa-solid fa-location-dot"></i> North America</span>
+            <span>Python</span><span>Tkinter</span><span>SQLite</span>
+          </div>
+          <h3>Inventory Management GUI</h3>
+          <p>Desktop application built using Python OOP architecture, SQLite transaction support, and data caching.</p>
+          <div class="project-links">
+            <a href="#" target="_blank"><i class="fa-brands fa-github"></i> Code</a>
+            <a href="#" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Demo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 3: Europe -->
+      <div class="project-card glass-card" data-category="web">
+        <div class="project-img-box">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="Dynamic Data Visualizer" />
+        </div>
+        <div class="project-details">
+          <div class="tags">
+            <span><i class="fa-solid fa-location-dot"></i> Europe</span>
+            <span>HTML5</span><span>CSS3</span><span>JavaScript</span>
+          </div>
+          <h3>Dynamic Data Visualizer</h3>
+          <p>Interactive web platform for real-time charting, dataset parsing, and algorithmic step visualizations.</p>
+          <div class="project-links">
+            <a href="#" target="_blank"><i class="fa-brands fa-github"></i> Code</a>
+            <a href="#" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section-container" id="skills">
+    <div class="section-header">
+      <span class="sub-heading">Technical Stack</span>
+      <h2>Skills & Expertise</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card glass-card">
+        <div class="skill-header">
+          <span><i class="fa-brands fa-python"></i> Python (OOP & DS)</span>
+          <span class="skill-percent">90%</span>
+        </div>
+        <div class="progress-bar"><div class="progress" style="--w: 90%;"></div></div>
+      </div>
+
+      <div class="skill-card glass-card">
+        <div class="skill-header">
+          <span><i class="fa-solid fa-database"></i> SQL & Database Design</span>
+          <span class="skill-percent">82%</span>
+        </div>
+        <div class="progress-bar"><div class="progress" style="--w: 82%;"></div></div>
+      </div>
+
+      <div class="skill-card glass-card">
+        <div class="skill-header">
+          <span><i class="fa-brands fa-html5"></i> Web Front-End (HTML/CSS/JS)</span>
+          <span class="skill-percent">85%</span>
+        </div>
+        <div class="progress-bar"><div class="progress" style="--w: 85%;"></div></div>
+      </div>
+
+      <div class="skill-card glass-card">
+        <div class="skill-header">
+          <span><i class="fa-brands fa-git-alt"></i> Git & Version Control</span>
+          <span class="skill-percent">80%</span>
+        </div>
+        <div class="progress-bar"><div class="progress" style="--w: 80%;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section-container" id="contact">
+    <div class="section-header">
+      <span class="sub-heading">Reach Out</span>
+      <h2>Contact Me</h2>
+    </div>
+    <div class="contact-wrapper glass-card">
+      <form class="contact-form" id="contactForm">
+        <div class="form-group-row">
+          <div class="input-field">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" required placeholder="John Doe" />
+          </div>
+          <div class="input-field">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" required placeholder="john@example.com" />
+          </div>
+        </div>
+        <div class="input-field">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" required placeholder="Project Collaboration / Inquiries" />
+        </div>
+        <div class="input-field">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" required placeholder="Type your message here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary form-btn">
+          <span>Send Message</span> <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Leroy Matienga. Built with precision and modern web standards.</p>
+  </footer>
+
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+</body>
+</html>
