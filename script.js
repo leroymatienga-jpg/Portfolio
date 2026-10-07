@@ -219,6 +219,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function openStatusModal(title, message, repoUrl, iconClass = "fa-solid fa-robot", badgeText = "In Active Development") {
   const modal = document.getElementById("statusModal");
   if (!modal) return;
+
+  // Mount inside globeWrapper so it is rendered in HTML5 Fullscreen top-layer and standard mode
+  const globeWrapper = document.getElementById("globeWrapper");
+  if (globeWrapper && modal.parentElement !== globeWrapper) {
+    globeWrapper.appendChild(modal);
+  }
+
   const titleEl = document.getElementById("modalTitle");
   const msgEl = document.getElementById("modalMessage");
   const linkEl = document.getElementById("modalActionLink");
@@ -262,6 +269,17 @@ function initStatusModal() {
       if (e.target === modal) closeStatusModal();
     });
   }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const curModal = document.getElementById("statusModal");
+      if (curModal && curModal.classList.contains("open")) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeStatusModal();
+      }
+    }
+  });
 
   // Hook all demo buttons in portfolio cards
   document.querySelectorAll(".project-demo-btn").forEach((btn) => {
@@ -921,6 +939,8 @@ function initEarthGlobe() {
     if (e.key === "Escape") {
       const modal = document.getElementById("statusModal");
       if (modal && modal.classList.contains("open")) {
+        e.preventDefault();
+        e.stopPropagation();
         closeStatusModal();
       } else if (isZoomedIn) {
         zoomOut();

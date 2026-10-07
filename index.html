@@ -160,6 +160,28 @@
           <span class="dock-dot dot-visualizer"></span> Data Visualizer <small>(Europe)</small>
         </button>
       </div>
+
+      <!-- Status / Progress Modal Dialog -->
+      <div class="custom-modal-backdrop" id="statusModal" aria-hidden="true">
+        <div class="custom-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
+          <div class="modal-icon-wrap">
+            <div class="modal-icon-glow"></div>
+            <i class="fa-solid fa-robot" id="modalIcon"></i>
+          </div>
+          <span class="modal-badge" id="modalBadge"><i class="fa-solid fa-screwdriver-wrench"></i> In Active Development</span>
+          <h3 class="modal-title" id="modalTitle">MUSA Assistant</h3>
+          <p class="modal-message" id="modalMessage">
+            Musa Assistant is still in progress... Voice recognition, student portal integrations, and AI scheduling modules are actively being built. Live demo will be available soon!
+          </p>
+          <div class="modal-actions">
+            <a href="https://github.com/leroymatienga-jpg/MUSA" target="_blank" rel="noopener noreferrer" id="modalActionLink" class="btn btn-secondary">
+              <i class="fa-brands fa-github"></i> View GitHub Repo
+            </a>
+            <button type="button" class="btn btn-primary" id="modalAckBtn">Got it!</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -241,28 +263,6 @@
   <footer class="footer">
     <p>&copy; 2026 Leroy Matienga. Built with precision and modern web standards.</p>
   </footer>
-
-  <!-- Status / Progress Modal Dialog -->
-  <div class="custom-modal-backdrop" id="statusModal" aria-hidden="true">
-    <div class="custom-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
-      <div class="modal-icon-wrap">
-        <div class="modal-icon-glow"></div>
-        <i class="fa-solid fa-robot" id="modalIcon"></i>
-      </div>
-      <span class="modal-badge" id="modalBadge"><i class="fa-solid fa-screwdriver-wrench"></i> In Active Development</span>
-      <h3 class="modal-title" id="modalTitle">MUSA Assistant</h3>
-      <p class="modal-message" id="modalMessage">
-        Musa Assistant is currently in active development. Voice recognition, student portal integrations, and AI scheduling modules are actively being built. Live demo will be available soon!
-      </p>
-      <div class="modal-actions">
-        <a href="https://github.com/leroymatienga-jpg/MUSA" target="_blank" rel="noopener noreferrer" id="modalActionLink" class="btn btn-secondary">
-          <i class="fa-brands fa-github"></i> View GitHub Repo
-        </a>
-        <button type="button" class="btn btn-primary" id="modalAckBtn">Got it!</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Custom JS -->
   <script src="script.js"></script>
