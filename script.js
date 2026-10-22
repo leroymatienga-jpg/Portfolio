@@ -175,53 +175,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         if (isGitHubPages) {
-          // ── GitHub Pages Serverless Handling ──
-          // Optional: Paste your free access key from https://web3forms.com
-          const WEB3FORMS_KEY = "";
+          // ── GitHub Pages Silent Serverless Delivery (FormSubmit.co) ──
+          // Delivers directly into leroymatienga@gmail.com in the background without opening email clients
+          const response = await fetch("https://formsubmit.co/ajax/leroymatienga@gmail.com", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              _subject: `Portfolio: ${formData.subject}`,
+              message: formData.message,
+              _captcha: "false",
+              _template: "table"
+            }),
+          });
 
-          if (WEB3FORMS_KEY) {
-            const response = await fetch("https://api.web3forms.com/submit", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "Accept": "application/json" },
-              body: JSON.stringify({
-                access_key: WEB3FORMS_KEY,
-                name: formData.name,
-                email: formData.email,
-                subject: formData.subject,
-                message: formData.message,
-              }),
-            });
-            const result = await response.json();
-            if (result.success) {
-              btn.innerHTML = `<span>Sent Successfully!</span> <i class="fa-solid fa-check"></i>`;
-              btn.style.backgroundColor = "#10b981";
-              btn.style.opacity = "1";
-              form.reset();
-              setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.style.backgroundColor = "";
-                btn.style.opacity = "";
-                btn.disabled = false;
-              }, 3000);
-              return;
-            }
+          const result = await response.json();
+
+          if (response.ok && (result.success === "true" || result.success === true)) {
+            btn.innerHTML = `<span>Sent Successfully!</span> <i class="fa-solid fa-check"></i>`;
+            btn.style.backgroundColor = "#10b981";
+            btn.style.opacity = "1";
+            form.reset();
+          } else if (result.message && result.message.includes("Activation")) {
+            // First time activation note
+            btn.innerHTML = `<span>Sent! Please check your email to activate</span> <i class="fa-solid fa-envelope"></i>`;
+            btn.style.backgroundColor = "#10b981";
+            btn.style.opacity = "1";
+            form.reset();
+          } else {
+            btn.innerHTML = `<span>${result.message || "Failed to send"}</span> <i class="fa-solid fa-xmark"></i>`;
+            btn.style.backgroundColor = "#ef4444";
+            btn.style.opacity = "1";
           }
 
-          // Direct email fallback on GitHub Pages: opens user's email client addressed to Leroy
-          const mailtoSub = encodeURIComponent(`Portfolio Inquiry: ${formData.subject}`);
-          const mailtoBody = encodeURIComponent(`From: ${formData.name} (${formData.email})\n\n${formData.message}`);
-          window.location.href = `mailto:leroymatienga@gmail.com?subject=${mailtoSub}&body=${mailtoBody}`;
-
-          btn.innerHTML = `<span>Opening Email Draft...</span> <i class="fa-solid fa-envelope"></i>`;
-          btn.style.backgroundColor = "#10b981";
-          btn.style.opacity = "1";
-          form.reset();
           setTimeout(() => {
             btn.innerHTML = originalHTML;
             btn.style.backgroundColor = "";
             btn.style.opacity = "";
             btn.disabled = false;
-          }, 3000);
+          }, 3500);
           return;
         }
 
