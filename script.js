@@ -170,7 +170,62 @@ document.addEventListener("DOMContentLoaded", () => {
         message: document.getElementById("message").value.trim(),
       };
 
+      // Check if running on GitHub Pages (static host) vs Local Server
+      const isGitHubPages = window.location.hostname.includes("github.io");
+
       try {
+        if (isGitHubPages) {
+          // ── GitHub Pages Serverless Handling ──
+          // Optional: Paste your free access key from https://web3forms.com
+          const WEB3FORMS_KEY = "";
+
+          if (WEB3FORMS_KEY) {
+            const response = await fetch("https://api.web3forms.com/submit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "Accept": "application/json" },
+              body: JSON.stringify({
+                access_key: WEB3FORMS_KEY,
+                name: formData.name,
+                email: formData.email,
+                subject: formData.subject,
+                message: formData.message,
+              }),
+            });
+            const result = await response.json();
+            if (result.success) {
+              btn.innerHTML = `<span>Sent Successfully!</span> <i class="fa-solid fa-check"></i>`;
+              btn.style.backgroundColor = "#10b981";
+              btn.style.opacity = "1";
+              form.reset();
+              setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.backgroundColor = "";
+                btn.style.opacity = "";
+                btn.disabled = false;
+              }, 3000);
+              return;
+            }
+          }
+
+          // Direct email fallback on GitHub Pages: opens user's email client addressed to Leroy
+          const mailtoSub = encodeURIComponent(`Portfolio Inquiry: ${formData.subject}`);
+          const mailtoBody = encodeURIComponent(`From: ${formData.name} (${formData.email})\n\n${formData.message}`);
+          window.location.href = `mailto:leroymatienga@gmail.com?subject=${mailtoSub}&body=${mailtoBody}`;
+
+          btn.innerHTML = `<span>Opening Email Draft...</span> <i class="fa-solid fa-envelope"></i>`;
+          btn.style.backgroundColor = "#10b981";
+          btn.style.opacity = "1";
+          form.reset();
+          setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.style.backgroundColor = "";
+            btn.style.opacity = "";
+            btn.disabled = false;
+          }, 3000);
+          return;
+        }
+
+        // ── Localhost / Local Python Flask Backend + SQLite ──
         const apiUrl = window.location.protocol === "file:"
           ? "http://localhost:5000/api/contact"
           : "/api/contact";
@@ -196,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
           btn.style.opacity = "1";
         }
       } catch (error) {
-        // Network error
+        // Network error (server not running or offline)
         console.error("Contact form network error:", error);
         btn.innerHTML = `<span>Server offline. Run: python app.py</span> <i class="fa-solid fa-triangle-exclamation"></i>`;
         btn.style.backgroundColor = "#ef4444";
