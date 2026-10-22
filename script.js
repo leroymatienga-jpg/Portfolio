@@ -171,7 +171,11 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        const response = await fetch("/api/contact", {
+        const apiUrl = window.location.protocol === "file:"
+          ? "http://localhost:5000/api/contact"
+          : "/api/contact";
+
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -193,7 +197,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         // Network error
-        btn.innerHTML = `<span>Network error. Try again.</span> <i class="fa-solid fa-xmark"></i>`;
+        console.error("Contact form network error:", error);
+        btn.innerHTML = `<span>Server offline. Run: python app.py</span> <i class="fa-solid fa-triangle-exclamation"></i>`;
         btn.style.backgroundColor = "#ef4444";
         btn.style.opacity = "1";
       }
