@@ -998,6 +998,8 @@ function initEarthGlobe() {
         e.preventDefault();
         e.stopPropagation();
         closeStatusModal();
+      } else if (wrapper && wrapper.classList.contains("mobile-fullscreen")) {
+        setFullscreenState(false);
       } else if (isZoomedIn) {
         zoomOut();
       }
@@ -1068,38 +1070,95 @@ function initEarthGlobe() {
     container.style.cursor = intersects.length > 0 ? "pointer" : "grab";
   });
 
-  // ── Fullscreen & Window Resize ──
+  // ── Fullscreen & Window Resize (Cross-Platform Mobile + Desktop) ──
   function resizeRenderer() {
     setTimeout(() => {
-      const newW = container.clientWidth;
-      const newH = container.clientHeight;
+      const newW = container.clientWidth || window.innerWidth;
+      const newH = container.clientHeight || window.innerHeight;
       camera.aspect = newW / newH;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
-    }, 100);
+    }, 120);
   }
 
-  if (fullscreenBtn && wrapper) {
-    fullscreenBtn.addEventListener("click", () => {
-      if (!document.fullscreenElement) {
-        wrapper.requestFullscreen().catch((err) => {
-          console.error(`Error enabling fullscreen: ${err.message}`);
-        });
-      } else {
-        document.exitFullscreen();
-      }
-    });
+  function isAnyFullscreen() {
+    return Boolean(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement ||
+      (wrapper && wrapper.classList.contains("mobile-fullscreen"))
+    );
+  }
 
-    document.addEventListener("fullscreenchange", () => {
-      const icon = fullscreenBtn.querySelector("i");
-      if (document.fullscreenElement) {
+  function setFullscreenState(active) {
+    const icon = fullscreenBtn ? fullscreenBtn.querySelector("i") : null;
+    if (active) {
+      if (icon) {
         icon.classList.remove("fa-expand");
         icon.classList.add("fa-compress");
-      } else {
+      }
+      if (wrapper) wrapper.classList.add("mobile-fullscreen");
+      document.body.style.overflow = "hidden";
+    } else {
+      if (icon) {
         icon.classList.remove("fa-compress");
         icon.classList.add("fa-expand");
       }
-      resizeRenderer();
+      if (wrapper) wrapper.classList.remove("mobile-fullscreen");
+      document.body.style.overflow = "";
+    }
+    resizeRenderer();
+  }
+
+  function toggleFullscreen() {
+    const isFs = isAnyFullscreen();
+
+    if (isFs) {
+      // Exit Fullscreen
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      setFullscreenState(false);
+    } else {
+      // Enter Fullscreen
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const reqFs = wrapper.requestFullscreen ||
+                    wrapper.webkitRequestFullscreen ||
+                    wrapper.mozRequestFullScreen ||
+                    wrapper.msRequestFullscreen;
+
+      if (reqFs && !isIOS) {
+        reqFs.call(wrapper)
+          .then(() => {
+            setFullscreenState(true);
+          })
+          .catch((err) => {
+            console.warn("Native fullscreen rejected, using CSS mobile fullscreen fallback:", err);
+            setFullscreenState(true);
+          });
+      } else {
+        // iOS or browsers without native Div Fullscreen API -> immediate CSS fullscreen
+        setFullscreenState(true);
+      }
+    }
+  }
+
+  if (fullscreenBtn && wrapper) {
+    fullscreenBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      toggleFullscreen();
+    });
+
+    ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"].forEach((evt) => {
+      document.addEventListener(evt, () => {
+        const hasNative = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+        if (!hasNative && wrapper && !wrapper.classList.contains("mobile-fullscreen")) {
+          setFullscreenState(false);
+        }
+      });
     });
   }
 
