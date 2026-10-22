@@ -178,7 +178,8 @@ def get_messages():
     Retrieve all contact messages (admin-only).
     Requires X-API-Key header matching ADMIN_API_KEY from .env.
     """
-    api_key = request.headers.get("X-API-Key", "")
+    # Allows authentication via X-API-Key header OR ?key= in browser URL
+    api_key = request.headers.get("X-API-Key", "") or request.args.get("key", "")
 
     if api_key != Config.ADMIN_API_KEY:
         return jsonify({
